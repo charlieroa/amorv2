@@ -31,7 +31,7 @@
         </div>
 
         <h2 class="mb-3 h4">Día <span id="diaActual">?</span> de 21</h2>
-        <button id="btnMostrarContenido" class="btn btn-primary btn-lg mb-3">Descubrir el Mensaje de Hoy</button>
+        <button id="btnMostrarContenido" class="btn btn-danger btn-lg mb-3">Descubrir el Mensaje de Hoy</button>
         
         <div id="contenedorMensaje" class="alert alert-light" style="display: none;"></div>
         <div id="contenedorPista" class="alert alert-info" style="display: none;">
@@ -45,27 +45,83 @@
         document.addEventListener('DOMContentLoaded', () => {
             const contenidoDiario = [
                 { mensaje: "Lore, ¿recuerdas cómo empezamos? ¿Recuerdas que hacía este tipo de cosas para enamorarte y te decía: 'lo peor que te puede pasar es que te enamores'? Quiero que esto no se pierda. Perdóname por hacerlo... Eres mi luz en medio de las tinieblas, eres la mano de Dios diciéndome: 'salta de la barca y camina conmigo'. Gracias por no soltar aún mi mano.", pista: "El" },
-                { mensaje: "Recuerdo cómo cada día tenía miedo de ir a una cita contigo, porque sabía la persona y el mujerón que eres. Me sudaba todo, me tocó tomar cerveza para tener el valor de ir a esa cita. Esta semana que fuimos a la iglesia, me sudaban las manos como ese primer día. Gracias por no soltar mi mano.", pista: "viaje" },
-                { mensaje: "Te hago chistes flojos todo el tiempo porque amo tu sonrisa. Amo verte: tu cara, tus labios, esos ojos que demuestran amor, esas manos, ese cuerpo. Recuerdo que cada día intentaba hablarte con la esperanza de que un día me dieras la oportunidad de conocerte, y conocerte fue lo mejor que me pasó.", pista: "de nuestras" },
-                { mensaje: "Llamarte cada día es un privilegio. No quiero perder un día más sin saber de ti. Eres el amor de mi vida, eres la futura esposa y madre de mis hijos. Como decimos con la Selección Colombia: ¡con la fe intacta!", pista: "vidas" },
-                { mensaje: "¡Qué suerte cuando me tomas de la mano! Qué triste que yo huyera de eso antes. Ahora no quiero soltarla nunca. Gracias por tomar mi mano y jamás soltarla.", pista: "empieza" },
-                { mensaje: "Sé que Mati es tu bendición y él se ganó también mi corazón. Sé que no ha sido la relación que esperas, pero quiero esforzarme también por él. Gracias por criar un niño como lo hiciste y por presentarme a tu bendición. Nunca dejes de soltar mi mano.", pista: "el" },
-                { mensaje: "Mil gracias por amar a mis bendiciones como lo haces. Mis perros nunca tuvieron esa figura que tú les das. Gracias por preocuparte por ellos y por ir de mi mano.", pista: "1" },
-                { mensaje: "Tengo que esforzarme, no solo hoy sino por siempre, para conquistarte. Recuérdamelo cuando esté bajito de ánimo. Uno se acostumbra, pero quiero ser como mi padre, que aunque no lo hace todos los días, tiene esos detalles. Tengo un gran ejemplo en casa.", pista: "de" },
-                { mensaje: "Gracias por estar pendiente de mi salud. Te decía que hemos pasado por tantas tormentas... En la salud y en la enfermedad, espero que nunca nos toque pasar por algo grave. No podría verte mal.", pista: "julio." },
-                { mensaje: "Gracias por los mil esfuerzos que hiciste durante nuestra relación. Fue lo que Dios prometió. Cada vez que lo hacías, ibas soltando un candado que hoy me tiene aquí, enamorado desde el alma.", pista: "A-" },
-                { mensaje: "Verte en las videollamadas diarias, escuchar tu voz, se volvió mi canción favorita. Es lo que levanta mi ánimo. Me había acostumbrado a ella y, después de que nos separamos, no tenía esa energía. Necesito de tu voz. Gracias por no soltar mi mano.", pista: "-lis-" },
-                { mensaje: "Sabes que amo que te preocupes por mis proyectos. Gracias, porque ahora son nuestros, de nuestra familia. Espero que un día podamos mirar hacia atrás y ver cuánto hemos crecido. Sé que eres esa persona que sujeta mi mano para crecer juntos y hacer equipo.", pista: "-ta" },
-                { mensaje: "Me hiciste mejor persona. Llegaste para cambiar muchos de mis miedos, para enseñarme cómo amar bonito. Eso es algo que nunca voy a poder olvidar. Gracias infinitas por eso.", pista: "ma-" },
-                { mensaje: "Eres una de las poquitas personas que logró desnudar mi alma. Me viste llorar, me has visto vulnerable, me viste roto, y eso solo puede significar que te veo como la compañera de vida con la que puedo mostrarme como soy. Gracias por no soltar mi mano.", pista: "-le-" },
-                { mensaje: "El futuro que imagino ya te lo contaba. Te decía que con Martica vengo haciendo terapia y que me hizo dibujar a la familia que soñaba. El dibujo mostró más de lo que imaginaba.", pista: "-tas." },
-                { mensaje: "Una canción que no sale de mi vida es 'Amor del Bueno' de Reyli Barba. Es en serio, tal como lo dice: '...así me fuiste despertando del sueño donde estaba...'. En el destino estaba que fueras para mí.", pista: "Te" },
-                { mensaje: "Haciendo esto me digo: 'creo que no las hacía desde el colegio'. Qué feo ver cómo te apagan esto. Pero sé que tú vienes rescatando esa parte de mí para poder mostrarte cómo se enamora a la antiguita.", pista: "a-" },
-                { mensaje: "Tenemos muchos sueños, muchos anhelos que por mi culpa se vienen secando. Perdóname. Esto tiene que ser como un árbol de sueños bien regado, que tiene que irse podando para que no se muera. Toca cuidarlo para que dé frutos.", pista: "-mo" },
-                { mensaje: "Ya casi llegamos al final, pero no de nuestra historia. Al final de demostrarte que no juego y que no puedo jugar contigo. Sé lo que es perderte y no quiero un día más de mi vida sin poder tenerte, sin poder verte, sin poder consentirte. Faltan pocos días para verte.", pista: "." },
-                { mensaje: "Gracias por este viaje. No ha pasado mucho tiempo, pero qué bien marcaste mi vida. Tatuaste tu nombre en mi mente y en mi corazón. Lograste construir un amor bonito con buenas bases sólidas, en contra de tormentas y lo que venga. Gracias por ser la arquitecta de este amor.", pista: "❤️" },
-                { mensaje: "Último día. Quiero que me acompañes a un viaje que no tiene vuelta de hoja. Aquí empiezan a cumplirse las promesas. Aquí es cuando todo inicia, sin miedos, sin más excusas...", pista: "¡Únelo todo y prepárate!" }
-            ];
+                { mensaje: "Recuerdo cómo cada día tenía miedo de ir a una cita contigo, porque sabía la persona y el mujerón que eres. Me sudaba todo, me toco hacer un esfuerzo para tener el valor de ir a esa cita. Esta semana que fuimos a la iglesia, me sudaban las manos como ese primer día. Gracias por no soltar mi mano.", pista: "Viaje" },
+               {
+    mensaje: "Una canción que no sale de mi vida es 'Amor del Bueno' de Reyli Barba. Es en serio, tal como lo dice: '...así me fuiste despertando del sueño donde estaba...'. En el destino estaba que fueras para mí.",
+    pista: "Te"
+  },
+  {
+    mensaje: "Me hiciste mejor persona. Llegaste para cambiar muchos de mis miedos, para enseñarme cómo amar bonito. Eso es algo que nunca voy a poder olvidar. Gracias infinitas por eso.",
+    pista: "ma-"
+  },
+  {
+    mensaje: "Último día. Quiero que me acompañes a un viaje que no tiene vuelta de hoja. Aquí empiezan a cumplirse las promesas. Aquí es cuando todo inicia, sin miedos, sin más excusas...",
+    pista: "¡Únelo todo y prepárate!"
+  },
+  {
+    mensaje: "Llamarte cada día es un privilegio. No quiero perder un día más sin saber de ti. Eres el amor de mi vida, eres la futura esposa y madre de mis hijos. Como decimos con la Selección Colombia: ¡con la fe intacta!",
+    pista: "vidas"
+  },
+  {
+    mensaje: "Haciendo esto me digo: 'creo que no las hacía desde el colegio'. Qué feo ver cómo te apagan esto. Pero sé que tú vienes rescatando esa parte de mí para poder mostrarte cómo se enamora a la antiguita.",
+    pista: "a-"
+  },
+  {
+    mensaje: "Tengo que esforzarme, no solo hoy sino por siempre, para conquistarte. Recuérdamelo cuando esté bajito de ánimo. Uno se acostumbra, pero quiero ser como mi padre, que aunque no lo hace todos los días, tiene esos detalles. Tengo un gran ejemplo en casa.",
+    pista: "de"
+  },
+  {
+    mensaje: "Mil gracias por amar a mis bendiciones como lo haces. Mis perros nunca tuvieron esa figura que tú les das. Gracias por preocuparte por ellos y por ir de mi mano.",
+    pista: "1"
+  },
+  {
+    mensaje: "Eres una de las poquitas personas que logró desnudar mi alma. Me viste llorar, me has visto vulnerable, me viste roto, y eso solo puede significar que te veo como la compañera de vida con la que puedo mostrarme como soy. Gracias por no soltar mi mano.",
+    pista: "-le-"
+  },
+  {
+    mensaje: "Gracias por estar pendiente de mi salud. Te decía que hemos pasado por tantas tormentas... En la salud y en la enfermedad, espero que nunca nos toque pasar por algo grave. No podría verte mal.",
+    pista: "julio."
+  },
+  {
+    mensaje: "El futuro que imagino ya te lo contaba. Te decía que con Martica vengo haciendo terapia y que me hizo dibujar a la familia que soñaba. El dibujo mostró más de lo que imaginaba.",
+    pista: "-tas."
+  },
+  {
+    mensaje: "¡Qué suerte cuando me tomas de la mano! Qué triste que yo huyera de eso antes. Ahora no quiero soltarla nunca. Gracias por tomar mi mano y jamás soltarla.",
+    pista: "empieza"
+  },
+  {
+    mensaje: "Te hago chistes flojos todo el tiempo porque amo tu sonrisa. Amo verte: tu cara, tus labios, esos ojos que demuestran amor, esas manos, ese cuerpo. Recuerdo que cada día intentaba hablarte con la esperanza de que un día me dieras la oportunidad de conocerte, y conocerte fue lo mejor que me pasó.",
+    pista: "de nuestras"
+  },
+  {
+    mensaje: "Gracias por los mil esfuerzos que hiciste durante nuestra relación. Fue lo que Dios prometió. Cada vez que lo hacías, ibas soltando un candado que hoy me tiene aquí, enamorado desde el alma.",
+    pista: "A-"
+  },
+  {
+    mensaje: "Sabes que amo que te preocupes por mis proyectos. Gracias, porque ahora son nuestros, de nuestra familia. Espero que un día podamos mirar hacia atrás y ver cuánto hemos crecido. Sé que eres esa persona que sujeta mi mano para crecer juntos y hacer equipo.",
+    pista: "-ta"
+  },
+  {
+    mensaje: "Tenemos muchos sueños, muchos anhelos que por mi culpa se vienen secando. Perdóname. Esto tiene que ser como un árbol de sueños bien regado, que tiene que irse podando para que no se muera. Toca cuidarlo para que dé frutos.",
+    pista: "-mo"
+  },
+  {
+    mensaje: "Verte en las videollamadas diarias, escuchar tu voz, se volvió mi canción favorita. Es lo que levanta mi ánimo. Me había acostumbrado a ella y, después de que nos separamos, no tenía esa energía. Necesito de tu voz. Gracias por no soltar mi mano.",
+    pista: "-lis-"
+  },
+  {
+    mensaje: "Sé que Mati es tu bendición y él se ganó también mi corazón. Sé que no ha sido la relación que esperas, pero quiero esforzarme también por él. Gracias por criar un niño como lo hiciste y por presentarme a tu bendición. Nunca dejes de soltar mi mano.",
+    pista: "el"
+  },
+  {
+    mensaje: "Ya casi llegamos al final, pero no de nuestra historia. Al final de demostrarte que no juego y que no puedo jugar contigo. Sé lo que es perderte y no quiero un día más de mi vida sin poder tenerte, sin poder verte, sin poder consentirte. Faltan pocos días para verte.",
+    pista: "."
+  },
+  {
+    mensaje: "Gracias por este viaje. No ha pasado mucho tiempo, pero qué bien marcaste mi vida. Tatuaste tu nombre en mi mente y en mi corazón. Lograste construir un amor bonito con buenas bases sólidas, en contra de tormentas y lo que venga. Gracias por ser la arquitecta de este amor.",
+    pista: "❤️"
+  } ];
 
             const btnMostrar = document.getElementById('btnMostrarContenido');
             const contenedorMsg = document.getElementById('contenedorMensaje');
