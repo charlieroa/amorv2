@@ -13,6 +13,7 @@
         #contenedorMensaje { font-size: 1.1rem; text-align: left; white-space: pre-wrap; }
         #contenedorPista { margin-top: 1rem; border-left: 4px solid #0d6efd; padding-left: 1rem; text-align: left; }
         .puzzle-piece { font-weight: bold; font-family: 'Courier New', Courier, monospace; font-size: 1.5rem; color: #d63384; }
+        #contenedorDestinoFinal { background-color: #d1e7dd; border-color: #badbcc; }
     </style>
 </head>
 <body>
@@ -34,132 +35,129 @@
         <button id="btnMostrarContenido" class="btn btn-danger btn-lg mb-3">Descubrir el Mensaje de Hoy</button>
         
         <div id="contenedorMensaje" class="alert alert-light" style="display: none;"></div>
+        
+        <!-- Contenedor de la pista normal (días 1-20) -->
         <div id="contenedorPista" class="alert alert-info" style="display: none;">
             <h5 class="alert-heading">Pista del Rompecabezas:</h5>
             <p id="textoPista" class="mb-0 puzzle-piece"></p>
         </div>
+
+        <!-- Contenedor del desafío final (solo día 21) -->
+        <div id="contenedorDesafioFinal" class="mt-3" style="display: none;">
+            <hr>
+            <h5 class="fw-bold">¡El Desafío Final!</h5>
+            <p>Une todas las pistas y escribe la frase secreta para revelar nuestro destino.</p>
+            <div class="input-group">
+                <input type="text" id="fraseFinalInput" class="form-control" placeholder="Escribe la frase completa aquí...">
+                <button class="btn btn-success" type="button" id="btnVerificarFrase">¡Revelar! ✨</button>
+            </div>
+            <div id="errorFrase" class="text-danger mt-2" style="display: none;"></div>
+        </div>
+
+        <!-- Contenedor para el mensaje del destino final -->
+        <div id="contenedorDestinoFinal" class="alert mt-3" style="display: none;"></div>
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Se actualizó el mensaje del día 21 y se eliminó la pista.
             const contenidoDiario = [
-                { mensaje: "Lore, ¿recuerdas cómo empezamos? ¿Recuerdas que hacía este tipo de cosas para enamorarte y te decía: 'lo peor que te puede pasar es que te enamores'? Quiero que esto no se pierda. Perdóname por hacerlo... Eres mi luz en medio de las tinieblas, eres la mano de Dios diciéndome: 'salta de la barca y camina conmigo'. Gracias por no soltar aún mi mano.", pista: "El" },
-                { mensaje: "Recuerdo cómo cada día tenía miedo de ir a una cita contigo, porque sabía la persona y el mujerón que eres. Me sudaba todo, me toco hacer un esfuerzo para tener el valor de ir a esa cita. Esta semana que fuimos a la iglesia, me sudaban las manos como ese primer día. Gracias por no soltar mi mano.", pista: "Viaje" },
-      {
-  "mensaje": "Me estás ayudando a orar todos los días. Sé que al principio vas a decir que no, que cuando ores no será por lo mismo que yo… pero yo se lo prometí a Dios. Esto forma parte de estos 21 días. No te va a doler, jaja. Son 21 días para recordarte que puedo luchar por ti, 21 días que te demuestran por qué estoy enamorado, 21 días que argumentan que no puedo volver a irme… Son 21 días de oración que marcan un antes y un después de lo que vivimos. Lo hago por los dos, porque los dos merecemos ser felices.",
-  "pista": "Te"
-},
-{
-  "mensaje": "Me hiciste mejor persona. Llegaste para cambiar muchos de mis miedos, para enseñarme cómo amar bonito, sin condiciones, sin prisas, pero con todo el alma. Aprendí a hablar con el corazón en la mano, a ceder, a crecer, a mirar el amor como algo que se cultiva. Eso es algo que nunca voy a poder olvidar. Gracias infinitas por eso y por enseñarme que el amor real no busca cambiar al otro, si no a mejorarlo desde el amor!, ahora tambien entiendo que es real que si queremos que esto funcione, cada uno tiene que estar trabajando en nuestras debilidades muriendo al yo para hacer feliz al otro.",
-  "pista": "ma-"
-},
-  {
-      mensaje: "Gracias por este viaje. No ha pasado mucho tiempo, pero qué bien marcaste mi vida. Tatuaste tu nombre en mi mente y en mi corazón. Lograste construir un amor bonito con buenas bases sólidas, en contra de tormentas y lo que venga. Gracias por ser la arquitecta de este amor.",
- 
-     pista: "¡Únelo todo y prepárate!"
-  },
-  {
-    mensaje: "Llamarte cada día es un privilegio. No quiero perder un día más sin saber de ti. Eres el amor de mi vida, eres la futura esposa y madre de mis hijos. Como decimos con la Selección Colombia: ¡con la fe intacta!",
-    pista: "vidas"
-  },
-  {
-    mensaje: "Haciendo esto me digo: 'creo que no las hacía desde el colegio'. Qué feo ver cómo te apagan esto. Pero sé que tú vienes rescatando esa parte de mí para poder mostrarte cómo se enamora a la antiguita.",
-    pista: "a-"
-  },
-  {
-    mensaje: "Tengo que esforzarme, no solo hoy sino por siempre, para conquistarte. Recuérdamelo cuando esté bajito de ánimo. Uno se acostumbra, pero quiero ser como mi padre, que aunque no lo hace todos los días, tiene esos detalles. Tengo un gran ejemplo en casa.",
-    pista: "de"
-  },
-  {
-    mensaje: "Mil gracias por amar a mis bendiciones como lo haces. Mis perros nunca tuvieron esa figura que tú les das. Gracias por preocuparte por ellos y por ir de mi mano.",
-    pista: "1"
-  },
-  {
-    mensaje: "Eres una de las poquitas personas que logró desnudar mi alma. Me viste llorar, me has visto vulnerable, me viste roto, y eso solo puede significar que te veo como la compañera de vida con la que puedo mostrarme como soy. Gracias por no soltar mi mano.",
-    pista: "-le-"
-  },
-  {
-    mensaje: "Gracias por estar pendiente de mi salud. Te decía que hemos pasado por tantas tormentas... En la salud y en la enfermedad, espero que nunca nos toque pasar por algo grave. No podría verte mal.",
-    pista: "julio."
-  },
-  {
-    mensaje: "El futuro que imagino ya te lo contaba. Te decía que con Martica vengo haciendo terapia y que me hizo dibujar a la familia que soñaba. El dibujo mostró más de lo que imaginaba.",
-    pista: "-tas."
-  },
-  {
-    mensaje: "¡Qué suerte cuando me tomas de la mano! Qué triste que yo huyera de eso antes. Ahora no quiero soltarla nunca. Gracias por tomar mi mano y jamás soltarla.",
-    pista: "empieza"
-  },
-  {
-    mensaje: "Te hago chistes flojos todo el tiempo porque amo tu sonrisa. Amo verte: tu cara, tus labios, esos ojos que demuestran amor, esas manos, ese cuerpo. Recuerdo que cada día intentaba hablarte con la esperanza de que un día me dieras la oportunidad de conocerte, y conocerte fue lo mejor que me pasó.",
-    pista: "de nuestras"
-  },
-  {
-    mensaje: "Gracias por los mil esfuerzos que hiciste durante nuestra relación. Fue lo que Dios prometió. Cada vez que lo hacías, ibas soltando un candado que hoy me tiene aquí, enamorado desde el alma.",
-    pista: "A-"
-  },
-  {
-    mensaje: "Sabes que amo que te preocupes por mis proyectos. Gracias, porque ahora son nuestros, de nuestra familia. Espero que un día podamos mirar hacia atrás y ver cuánto hemos crecido. Sé que eres esa persona que sujeta mi mano para crecer juntos y hacer equipo.",
-    pista: "-ta"
-  },
-  {
-    mensaje: "Tenemos muchos sueños, muchos anhelos que por mi culpa se vienen secando. Perdóname. Esto tiene que ser como un árbol de sueños bien regado, que tiene que irse podando para que no se muera. Toca cuidarlo para que dé frutos.",
-    pista: "-mo"
-  },
-  {
-    mensaje: "Verte en las videollamadas diarias, escuchar tu voz, se volvió mi canción favorita. Es lo que levanta mi ánimo. Me había acostumbrado a ella y, después de que nos separamos, no tenía esa energía. Necesito de tu voz. Gracias por no soltar mi mano.",
-    pista: "-lis-"
-  },
-  {
-    mensaje: "Sé que Mati es tu bendición y él se ganó también mi corazón. Sé que no ha sido la relación que esperas, pero quiero esforzarme también por él. Gracias por criar un niño como lo hiciste y por presentarme a tu bendición. Nunca dejes de soltar mi mano.",
-    pista: "el"
-  },
-  {
-    mensaje: "Ya casi llegamos al final, pero no de nuestra historia. Al final de demostrarte que no juego y que no puedo jugar contigo. Sé lo que es perderte y no quiero un día más de mi vida sin poder tenerte, sin poder verte, sin poder consentirte. Faltan pocos días para verte.",
-    pista: "."
-  },
-  {
-     mensaje: "Último día. Quiero que me acompañes a un viaje que no tiene vuelta de hoja. Aquí empiezan a cumplirse las promesas. Aquí es cuando todo inicia, sin miedos, sin más excusas...",
-  
-     pista: "❤️"
-  } ];
+                 { mensaje: "Lore, ¿recuerdas cómo empezamos? ¿Recuerdas que hacía este tipo de cosas para enamorarte y te decía: 'lo peor que te puede pasar es que te enamores'? Quiero que esto no se pierda. Perdóname por hacerlo... Eres mi luz en medio de las tinieblas, eres la mano de Dios diciéndome: 'salta de la barca y camina conmigo'. Gracias por no soltar aún mi mano.", pista: "El" }, //1
+                { mensaje: "Recuerdo cómo cada día tenía miedo de ir a una cita contigo, porque sabía la persona y el mujerón que eres. Me sudaba todo, me toco hacer un esfuerzo para tener el valor de ir a esa cita. Esta semana que fuimos a la iglesia, me sudaban las manos como ese primer día. Gracias por no soltar mi mano.", pista: "Viaje" }, //2
+                { mensaje: "Me estás ayudando a orar todos los días. Sé que al principio vas a decir que no, que cuando ores no será por lo mismo que yo… pero yo se lo prometí a Dios. Esto forma parte de estos 21 días...", pista: "Te" }, //3
+                { mensaje: "Me hiciste mejor persona. Llegaste para cambiar muchos de mis miedos, para enseñarme cómo amar bonito, sin condiciones, sin prisas, pero con todo el alma. Aprendí a hablar con el corazón en la mano...", pista: "ma-" }, //4
+                { mensaje: "Gracias por este viaje. No ha pasado mucho tiempo, pero qué bien marcaste mi vida. Tatuaste tu nombre en mi mente y en mi corazón. Lograste construir un amor bonito con buenas bases sólidas...", pista: "Alista" }, //5
+                { mensaje: "Llamarte cada día es un privilegio. No quiero perder un día más sin saber de ti. Eres el amor de mi vida, eres la futura esposa y madre de mis hijos. ¡Con la fe intacta!", pista: "vidas" }, //6
+                { mensaje: "Haciendo esto me digo: 'creo que no las hacía desde el colegio'. Qué feo ver cómo te apagan esto. Pero sé que tú vienes rescatando esa parte de mí para poder mostrarte cómo se enamora a la antiguita.", pista: "a-" }, //7
+                { mensaje: "Tengo que esforzarme, no solo hoy sino por siempre, para conquistarte. Recuérdamelo cuando esté bajito de ánimo. Uno se acostumbra, pero quiero ser como mi padre, que tiene esos detalles.", pista: "de" }, //8
+                { mensaje: "Mil gracias por amar a mis bendiciones como lo haces. Mis perros nunca tuvieron esa figura que tú les das. Gracias por preocuparte por ellos y por ir de mi mano.", pista: "1" }, //9
+                { mensaje: "Eres una de las poquitas personas que logró desnudar mi alma. Me viste llorar, me has visto vulnerable, me viste roto, y eso solo puede significar que te veo como la compañera de vida.", pista: "-le-" }, //10
+                { mensaje: "Sé que Mati es tu bendición, y sin buscarlo, él también se ganó mi corazón. Entiendo que esta relación no ha sido siempre lo que soñaste o esperabas, pero quiero que sepas que estoy aquí no solo por ti, sino también por él. Estoy dispuesto(a) a aprender, a crecer, y a esforzarme cada día para ser alguien que sume en su vida, que le dé amor, respeto y estabilidad.Gracias por criar un niño tan noble, tan valiente y lleno de luz. Eso dice mucho de ti. No todos los días se encuentra un corazón tan puro en un niño, y eso no es casualidad, es fruto de tu amor, tu entrega y tu ejemplo..", pista: "el" }, //19
+                { mensaje: "Gracias por estar pendiente de mi salud. Te decía que hemos pasado por tantas tormentas... En la salud y en la enfermedad, espero que nunca nos toque pasar por algo grave.", pista: "julio." }, //11
+                { mensaje: "El futuro que imagino ya te lo contaba. Te decía que con Martica vengo haciendo terapia y que me hizo dibujar a la familia que soñaba. El dibujo mostró más de lo que imaginaba.", pista: "maletas" }, //12
+                { mensaje: "¡Qué suerte cuando me tomas de la mano! Qué triste que yo huyera de eso antes. Ahora no quiero soltarla nunca. Gracias por tomar mi mano y jamás soltarla.", pista: "empieza" }, //13
+                { mensaje: "Te hago chistes flojos todo el tiempo porque amo tu sonrisa. Amo verte: tu cara, tus labios, esos ojos que demuestran amor, esas manos, ese cuerpo. Conocerte fue lo mejor que me pasó.", pista: "de nuestras" }, //14
+                { mensaje: "Gracias por los mil esfuerzos que hiciste durante nuestra relación. Fue lo que Dios prometió. Cada vez que lo hacías, ibas soltando un candado que hoy me tiene aquí, enamorado desde el alma.", pista: "" }, //15 (Pista eliminada y movida al día 5 para formar "Alista")
+                { mensaje: "Sabes que amo que te preocupes por mis proyectos. Gracias, porque ahora son nuestros, de nuestra familia. Espero que un día podamos mirar hacia atrás y ver cuánto hemos crecido.", pista: "" }, //16 (Pista eliminada y movida al día 5)
+                { mensaje: "Tenemos muchos sueños, muchos anhelos que por mi culpa se vienen secando. Perdóname. Esto tiene que ser como un árbol de sueños bien regado que hay que cuidar para que dé frutos.", pista: "-mo" }, //17
+                { mensaje: "Verte en las videollamadas diarias, escuchar tu voz, se volvió mi canción favorita. Es lo que levanta mi ánimo. Necesito de tu voz. Gracias por no soltar mi mano.", pista: "" }, //18 (Pista eliminada y movida al día 5)
+                { mensaje: "Sé que Mati es tu bendición y él se ganó también mi corazón. Sé que no ha sido la relación que esperas, pero quiero esforzarme también por él. Gracias por criar un niño como lo hiciste.", pista: "el" }, //19
+                { mensaje: "Ya casi llegamos al final, pero no de nuestra historia. Al final de demostrarte que no juego y que no puedo jugar contigo. Sé lo que es perderte y no quiero un día más sin poder tenerte.", pista: "." }, //20
+                { mensaje: "Último día. Quiero que me acompañes a un viaje que no tiene vuelta de hoja. Aquí empiezan a cumplirse las promesas. Aquí es cuando todo inicia, sin miedos, sin más excusas... ¡Ahora, une todas las pistas y revela nuestro destino!", pista: null } //21
+            ];
 
             const btnMostrar = document.getElementById('btnMostrarContenido');
             const contenedorMsg = document.getElementById('contenedorMensaje');
             const contenedorPista = document.getElementById('contenedorPista');
             const textoPista = document.getElementById('textoPista');
             const diaActualSpan = document.getElementById('diaActual');
-
-            // --- CÓDIGO CORREGIDO PARA FECHAS UNIVERSALES (UTC) ---
-            // Formato: Date.UTC(AÑO, MES, DÍA). Mes 6 es Julio.
-            // Esta fecha es la misma para cualquier persona en el mundo.
-            const fechaInicioUTC = new Date(Date.UTC(2025, 6, 7)); 
             
-            // Obtenemos la fecha actual también en UTC para una comparación justa.
+            // --- ELEMENTOS NUEVOS PARA EL DÍA 21 ---
+            const contenedorDesafioFinal = document.getElementById('contenedorDesafioFinal');
+            const btnVerificarFrase = document.getElementById('btnVerificarFrase');
+            const fraseFinalInput = document.getElementById('fraseFinalInput');
+            const contenedorDestinoFinal = document.getElementById('contenedorDestinoFinal');
+            const errorFrase = document.getElementById('errorFrase');
+
+            const fechaInicioUTC = new Date(Date.UTC(2025, 6, 7)); 
             const hoy = new Date();
             const hoyUTC = new Date(Date.UTC(hoy.getUTCFullYear(), hoy.getUTCMonth(), hoy.getUTCDate()));
 
-            // La diferencia siempre será correcta, sin importar la zona horaria.
             const diferenciaMs = hoyUTC.getTime() - fechaInicioUTC.getTime();
             const diaDelCiclo = Math.floor(diferenciaMs / 86400000) + 1;
             
             if (diaDelCiclo >= 1 && diaDelCiclo <= contenidoDiario.length) {
                 diaActualSpan.textContent = diaDelCiclo;
+                
                 btnMostrar.addEventListener('click', () => {
                     const contenidoDelDia = contenidoDiario[diaDelCiclo - 1];
                     contenedorMsg.textContent = contenidoDelDia.mensaje;
                     contenedorMsg.style.display = 'block';
-                    textoPista.textContent = contenidoDelDia.pista;
-                    contenedorPista.style.display = 'block';
-                    btnMostrar.disabled = true;
-                    btnMostrar.textContent = "Mensaje Descubierto";
+                    
                     if (diaDelCiclo === 21) {
-                         confetti({ particleCount: 400, spread: 180, origin: { y: 0.6 }, startVelocity: 40 });
+                        // Lógica especial para el día 21
+                        contenedorDesafioFinal.style.display = 'block';
+                        confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 }, startVelocity: 30 });
                     } else {
+                        // Lógica para los días 1-20
+                        textoPista.textContent = contenidoDelDia.pista;
+                        contenedorPista.style.display = 'block';
                         confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
                     }
+
+                    btnMostrar.disabled = true;
+                    btnMostrar.textContent = "Mensaje Descubierto";
                 });
+
+                // --- LÓGICA DEL BOTÓN DE VERIFICACIÓN ---
+                btnVerificarFrase.addEventListener('click', () => {
+                    // La frase correcta a verificar (sin el corazón)
+                    const fraseCorrecta = "El viaje de nuestras vidas empieza el 1 de julio. Alista maletas. Te amo.";
+                    const intentoUsuario = fraseFinalInput.value.trim();
+
+                    // Comparamos ignorando mayúsculas/minúsculas para evitar errores
+                    if (intentoUsuario.toLowerCase() === fraseCorrecta.toLowerCase()) {
+                        contenedorDestinoFinal.innerHTML = `
+                            <h3 class="alert-heading fw-bold">¡CORRECTO!</h3>
+                            <p class="fs-4 mb-0">¡Nos vamos para <strong>Villa de Leyva</strong>! ¡Ya todo está listo!</p>`;
+                        contenedorDestinoFinal.style.display = 'block';
+                        
+                        // Ocultamos el desafío y el mensaje de error
+                        contenedorDesafioFinal.style.display = 'none';
+                        errorFrase.style.display = 'none';
+                        
+                        // ¡Confeti de celebración!
+                        confetti({ particleCount: 400, spread: 180, origin: { y: 0.6 }, startVelocity: 40, gravity: 0.8 });
+
+                    } else {
+                        // Mostramos un mensaje de error si la frase es incorrecta
+                        errorFrase.textContent = 'La frase no es correcta. ¡Revisa bien las pistas y vuelve a intentarlo!';
+                        errorFrase.style.display = 'block';
+                    }
+                });
+
             } else if (diaDelCiclo < 1) {
                  diaActualSpan.textContent = "?";
                  btnMostrar.textContent = 'Nuestro viaje aún no comienza';

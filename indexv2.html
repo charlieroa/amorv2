@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Un Viaje Para Ti, Lore</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    body, html { height: 100%; margin: 0; padding: 0; }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f8f9fa;
+      padding: 1rem;
+    }
+    .container {
+      text-align: center;
+      padding: 2rem;
+      background-color: white;
+      border-radius: 15px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+      max-width: 650px;
+    }
+    .instructions {
+      background-color: #fffde7;
+      border: 1px solid #ffc107;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+    #contenedorMensaje {
+      font-size: 1.1rem;
+      text-align: left;
+      white-space: pre-wrap;
+    }
+    #contenedorPista {
+      margin-top: 1rem;
+      border-left: 4px solid #0d6efd;
+      padding-left: 1rem;
+      text-align: left;
+    }
+    .puzzle-piece {
+      font-weight: bold;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.5rem;
+      color: #d63384;
+    }
+    #contenedorDestinoFinal {
+      background-color: #d1e7dd;
+      border-color: #badbcc;
+    }
+
+    #fraseOcultaDisplay {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background-color: #e9ecef;
+      border-radius: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      line-height: 2rem;
+    }
+
+    .char-container {
+      display: inline-block;
+      min-width: 20px;
+      margin: 2px;
+      text-align: center;
+      font-weight: bold;
+      color: transparent;
+      border-bottom: 3px solid #343a40;
+      transition: all 0.3s ease;
+    }
+    .char-container.revelada {
+      color: #d63384;
+      border-bottom-color: transparent;
+    }
+    .char-container.espacio,
+    .char-container.puntuacion {
+      color: #343a40;
+      border-bottom: none;
+      min-width: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="mb-4">Lore te amo ❤️</h1>
+    <div class="instructions">
+      <h5 class="fw-bold">Instrucciones:</h5>
+      <p class="mb-0">
+        Recolecta la <strong>pista</strong> de cada día. El día 21, escribe cada pista en el campo de texto para armar la frase secreta. ¡Las pistas correctas aparecerán automáticamente!
+      </p>
+    </div>
+    <h2 class="mb-3 h4">Día <span id="diaActual">?</span> de 21</h2>
+    <button id="btnMostrarContenido" class="btn btn-danger btn-lg mb-3">Descubrir el Mensaje de Hoy</button>
+
+    <div id="contenedorMensaje" class="alert alert-light" style="display: none;"></div>
+    <div id="contenedorPista" class="alert alert-info" style="display: none;">
+      <h5 class="alert-heading">Pista del Rompecabezas:</h5>
+      <p id="textoPista" class="mb-0 puzzle-piece"></p>
+    </div>
+
+    <div id="contenedorDesafioFinal" class="mt-3" style="display: none;">
+      <hr />
+      <h5 class="fw-bold">¡Arma el Rompecabezas Final!</h5>
+      <p>Escribe cada pista aquí. ¡Se colocarán solas!</p>
+      <div id="fraseOcultaDisplay"></div>
+      <input type="text" id="pistaInput" class="form-control form-control-lg mt-3" placeholder="Escribe una pista..." />
+      <div id="mensajePista" class="mt-2" style="height: 24px;"></div>
+    </div>
+
+    <div id="contenedorDestinoFinal" class="alert mt-4" style="display: none;"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const contenidoDiario = [
+        { pista: "El", mensaje: "Mensaje del día 1..." },
+        { pista: "Viaje", mensaje: "Mensaje del día 2..." },
+        { pista: "Te", mensaje: "Mensaje del día 3..." },
+        { pista: "ma-", mensaje: "Mensaje del día 4..." },
+        { pista: "Alista", mensaje: "Mensaje del día 5..." },
+        { pista: "vidas", mensaje: "Mensaje del día 6..." },
+        { pista: "a-", mensaje: "Mensaje del día 7..." },
+        { pista: "de", mensaje: "Mensaje del día 8..." },
+        { pista: "1", mensaje: "Mensaje del día 9..." },
+        { pista: "-le-", mensaje: "Mensaje del día 10..." },
+        { pista: "julio,", mensaje: "Mensaje del día 11..." },
+        { pista: "maletas", mensaje: "Mensaje del día 12..." },
+        { pista: "empieza", mensaje: "Mensaje del día 13..." },
+        { pista: "de nuestras", mensaje: "Mensaje del día 14..." },
+        { pista: "", mensaje: "Mensaje del día 15..." },
+        { pista: "", mensaje: "Mensaje del día 16..." },
+        { pista: "-mo", mensaje: "Mensaje del día 17..." },
+        { pista: "", mensaje: "Mensaje del día 18..." },
+        { pista: "el", mensaje: "Mensaje del día 19..." },
+        { pista: ".", mensaje: "Mensaje del día 20..." },
+      ];
+      const mensajeDia21 = "Último día. Quiero que me acompañes a un viaje que no tiene vuelta de hoja. Aquí empiezan a cumplirse las promesas... ¡Ahora, arma la frase final con las pistas que encontraste!";
+
+      const btnMostrar = document.getElementById("btnMostrarContenido");
+      const contenedorMsg = document.getElementById("contenedorMensaje");
+      const contenedorPista = document.getElementById("contenedorPista");
+      const textoPista = document.getElementById("textoPista");
+      const diaActualSpan = document.getElementById("diaActual");
+      const contenedorDesafioFinal = document.getElementById("contenedorDesafioFinal");
+      const pistaInput = document.getElementById("pistaInput");
+      const mensajePistaDiv = document.getElementById("mensajePista");
+      const contenedorDestinoFinal = document.getElementById("contenedorDestinoFinal");
+      const fraseOcultaDisplay = document.getElementById("fraseOcultaDisplay");
+
+      const fraseCorrecta = "El viaje de nuestras vidas empieza el 1 de julio, alista maletas te amo.";
+      const palabrasClave = [
+        { pista: "El", revelada: false }, { pista: "viaje", revelada: false },
+        { pista: "de nuestras", revelada: false }, { pista: "vidas", revelada: false },
+        { pista: "empieza", revelada: false }, { pista: "el", revelada: false },
+        { pista: "1", revelada: false }, { pista: "de", revelada: false },
+        { pista: "julio,", revelada: false }, { pista: "alista", revelada: false },
+        { pista: "maletas", revelada: false }, { pista: "te", revelada: false },
+        { pista: "amo", revelada: false }, { pista: ".", revelada: false }
+      ];
+
+      const diaDelCiclo = 21;
+
+      if (diaDelCiclo >= 1 && diaDelCiclo <= 21) {
+        diaActualSpan.textContent = diaDelCiclo;
+        btnMostrar.addEventListener("click", manejarClickBoton);
+      } else {
+        diaActualSpan.textContent = diaDelCiclo < 1 ? "?" : "Fin";
+        btnMostrar.textContent = diaDelCiclo < 1 ? "Nuestro viaje aún no comienza" : "Nuestro viaje ha concluido";
+        btnMostrar.disabled = true;
+      }
+
+      function manejarClickBoton() {
+        if (diaDelCiclo === 21) {
+          contenedorMsg.textContent = mensajeDia21;
+          iniciarDesafioFinal();
+        } else {
+          const contenidoDelDia = contenidoDiario[diaDelCiclo - 1];
+          contenedorMsg.textContent = contenidoDelDia.mensaje;
+          textoPista.textContent = contenidoDelDia.pista;
+          contenedorPista.style.display = "block";
+        }
+        contenedorMsg.style.display = "block";
+        btnMostrar.disabled = true;
+        btnMostrar.textContent = "Mensaje Descubierto";
+        if (diaDelCiclo !== 21) confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+      }
+
+      function iniciarDesafioFinal() {
+        crearDisplayAhorcado(fraseCorrecta);
+        contenedorDesafioFinal.style.display = "block";
+        pistaInput.addEventListener("input", verificarPistaEnTiempoReal);
+        pistaInput.focus();
+      }
+
+      function crearDisplayAhorcado(frase) {
+        fraseOcultaDisplay.innerHTML = "";
+        for (const char of frase) {
+          const span = document.createElement("span");
+          span.textContent = char;
+          span.classList.add("char-container");
+          if (char === " ") span.classList.add("espacio", "revelada");
+          fraseOcultaDisplay.appendChild(span);
+        }
+      }
+
+      function verificarPistaEnTiempoReal() {
+        const intento = pistaInput.value.trim().toLowerCase();
+        if (!intento) return;
+
+        const partes = intento.split(/[\s,.\-]+/).filter(Boolean);
+        let acierto = false;
+
+        partes.forEach(fragmento => {
+          palabrasClave.forEach((palabra, i) => {
+            if (!palabra.revelada && palabra.pista.toLowerCase().includes(fragmento)) {
+              revelarPalabraEnDisplay(palabra.pista, i);
+              palabra.revelada = true;
+              acierto = true;
+            }
+          });
+        });
+
+        if (acierto) {
+          mensajePistaDiv.textContent = "¡Correcto!";
+          mensajePistaDiv.className = "mt-2 text-success fw-bold";
+          setTimeout(() => {
+            pistaInput.value = "";
+            mensajePistaDiv.textContent = "";
+          }, 800);
+        }
+
+        comprobarVictoria();
+      }
+
+      function revelarPalabraEnDisplay(palabra, index) {
+        const spans = fraseOcultaDisplay.children;
+        let startIndex = fraseCorrecta.toLowerCase().indexOf(palabra.toLowerCase());
+
+        if (palabra.toLowerCase() === "el") {
+          startIndex = palabrasClave[0].revelada
+            ? fraseCorrecta.toLowerCase().lastIndexOf("el")
+            : fraseCorrecta.toLowerCase().indexOf("el");
+        }
+
+        for (let i = startIndex; i < startIndex + palabra.length; i++) {
+          if (spans[i]) {
+            spans[i].classList.add("revelada");
+            if (spans[i].textContent === ".") {
+              spans[i].classList.add("puntuacion");
+            }
+          }
+        }
+      }
+
+      function comprobarVictoria() {
+        if (palabrasClave.every(p => p.revelada)) {
+          setTimeout(mostrarDestinoFinal, 500);
+        }
+      }
+
+      function mostrarDestinoFinal() {
+        contenedorDestinoFinal.innerHTML = `
+          <h3 class="alert-heading fw-bold">¡LO ARMASTE!</h3>
+          <p class="fs-4 mb-0">¡Nos vamos para <strong>Villa de Leyva</strong>! ¡Ya todo está listo!</p>`;
+        contenedorDestinoFinal.style.display = "block";
+        contenedorDesafioFinal.style.display = "none";
+        confetti({ particleCount: 400, spread: 180, origin: { y: 0.6 }, startVelocity: 40, gravity: 0.8 });
+      }
+    });
+  </script>
+</body>
+</html>
